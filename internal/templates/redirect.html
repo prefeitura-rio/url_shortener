@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    {{ if .Title }}
+    <!-- Title Meta Tags -->
+    <title>{{ .Title }}</title>
+    <meta property="og:title" content="{{ .Title }}">
+    <meta property="og:site_name" content="{{ .Title }}">
+    <meta name="twitter:title" content="{{ .Title }}">
+    {{ end }}
+
+    {{ if .Description }}
+    <!-- Description Meta Tags -->
+    <meta name="description" content="{{ .Description }}">
+    <meta property="og:description" content="{{ .Description }}">
+    <meta name="twitter:description" content="{{ .Description }}">
+    {{ end }}
+
+    {{ if .ImageURL }}
+    <!-- Image Meta Tags -->
+    <meta property="og:image" itemprop="image" content="{{ .ImageURL }}">
+    <meta name="twitter:image" content="{{ .ImageURL }}">
+    {{ end }}
+
+    <!-- Domain Meta Tags -->
+    <meta property="og:type" content="website">
+    {{ if .TwitterDomain }}
+    <meta property="twitter:domain" content="{{ .TwitterDomain }}">
+    {{ end }}
+
+    <!-- Twitter-specific Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+
+    {{ if .Destination }}
+    <!-- URL Meta Tags -->
+    <meta property="og:url" content="{{ .Destination }}">
+    <meta property="twitter:url" content="{{ .Destination }}">
+    <meta http-equiv="refresh" content="0; URL='{{ .Destination }}'"/>
+    {{ end }}
+
+    <!-- Additional Meta Tags for Better SEO -->
+    <meta name="robots" content="noindex, nofollow">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <!-- Preconnect to destination for faster redirect -->
+    {{ if .Destination }}
+    <link rel="preconnect" href="{{ .Destination }}">
+    {{ end }}
+</head>
+<body>
+    <!-- Fallback redirect in case meta refresh doesn't work -->
+    {{ if .Destination }}
+    <script>
+        window.location.href = '{{ .Destination }}';
+    </script>
+    <p>Redirecting to <a href="{{ .Destination }}">{{ .Destination }}</a>...</p>
+    {{ else }}
+    <p>URL not found or has expired.</p>
+    {{ end }}
+</body>
+</html> 

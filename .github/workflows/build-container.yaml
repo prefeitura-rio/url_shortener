@@ -75,11 +75,19 @@ jobs:
         if: steps.check-k8s-only.outputs.k8s_only != 'true'
         run: |
           if [ "${GITHUB_REF##*/}" == "main" ]; then
-            SERVER_URL="https://staging.app.dados.rio/link/api"
-          elif [ "${GITHUB_REF##*/}" == "staging" ]; then
             SERVER_URL="https://pref.rio/link/api"
+          elif [ "${GITHUB_REF##*/}" == "staging" ]; then
+            SERVER_URL="https://staging.app.dados.rio/link/api"
           fi
-          jq --arg url "$SERVER_URL" '.servers = [{"url": $url}]' \
+          jq --arg url "$SERVER_URL" '.servers = [{"url": $url}] |
+              .components.securitySchemes = {
+                "bearerAuth": {
+                  "type": "http",
+                  "scheme": "bearer",
+                  "bearerFormat": "JWT"
+                }
+              } |
+              .paths |= with_entries(.value |= with_entries(.value.security = [{"bearerAuth": []}]))' \
           docs/openapi-v3.json > docs/openapi-v3.json.tmp && \
           mv docs/openapi-v3.json.tmp docs/openapi-v3.json
 

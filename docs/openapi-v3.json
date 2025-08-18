@@ -561,7 +561,7 @@
   },
   "servers": [
     {
-      "url": "https://staging.app.dados.rio/link/api"
+      "url": "https://pref.rio/link/api"
     }
   ],
   "components": {

@@ -19,6 +19,13 @@ jobs:
       - name: Check if k8s-only changes
         id: check-k8s-only
         run: |
+          # Handle first push to new branch (when before is all zeros)
+          if [ "${{ github.event.before }}" = "0000000000000000000000000000000000000000" ]; then
+            echo "k8s_only=false" >> $GITHUB_OUTPUT
+            echo "First push to branch, proceeding with build"
+            exit 0
+          fi
+          
           # Get list of changed files
           CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
           

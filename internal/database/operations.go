@@ -94,7 +94,7 @@ func (db *DB) GetURLByID(ctx context.Context, id uuid.UUID) (*URL, error) {
 func (db *DB) GetURLByShortPath(ctx context.Context, shortPath string) (*URL, error) {
 	query := `
 		SELECT id, short_path, destination, title, description, image_url, expires_at, created_at, updated_at
-		FROM urls WHERE short_path = $1 AND (expires_at IS NULL OR expires_at > datetime('now'))
+		FROM urls WHERE short_path = $1 AND (expires_at IS NULL OR expires_at > NOW())
 	`
 
 	var url URL
@@ -175,7 +175,7 @@ func (db *DB) ListURLs(ctx context.Context, page, limit int) (*ListURLsResponse,
 
 func (db *DB) UpdateURL(ctx context.Context, id uuid.UUID, req UpdateURLRequest) (*URL, error) {
 	// Build dynamic query
-	query := `UPDATE urls SET updated_at = datetime('now')`
+	query := `UPDATE urls SET updated_at = NOW()`
 	args := []interface{}{}
 	argCount := 1
 

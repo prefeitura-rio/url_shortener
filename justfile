@@ -29,21 +29,27 @@ dev:
     @echo "Running URL shortener in development mode..."
     air
 
-# Run tests (currently disabled)
+# Run tests
 test:
-    @echo "Tests have been removed from this project"
+    @echo "Running tests..."
+    go test -v ./...
 
-# Run tests with coverage (currently disabled)
+# Run tests with coverage
 test-coverage:
-    @echo "Tests have been removed from this project"
+    @echo "Running tests with coverage..."
+    go test -v -coverprofile=coverage.out ./...
+    go tool cover -html=coverage.out -o coverage.html
+    @echo "Coverage report generated: coverage.html"
 
-# Run tests with race detection (currently disabled)
+# Run tests with race detection
 test-race:
-    @echo "Tests have been removed from this project"
+    @echo "Running tests with race detection..."
+    go test -race -v ./...
 
-# Run benchmarks (currently disabled)
+# Run benchmarks
 bench:
-    @echo "Tests have been removed from this project"
+    @echo "Running benchmarks..."
+    go test -bench=. -v ./...
 
 # Format code
 fmt:

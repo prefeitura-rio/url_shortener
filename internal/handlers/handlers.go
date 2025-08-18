@@ -57,6 +57,16 @@ func New(db Database, cache Cache, cfg *config.Config) *Handler {
 	}
 }
 
+// NewWithTemplate creates a handler with optional template (for testing)
+func NewWithTemplate(db Database, cache Cache, cfg *config.Config, tmpl *template.Template) *Handler {
+	return &Handler{
+		db:     db,
+		cache:  cache,
+		config: cfg,
+		tmpl:   tmpl,
+	}
+}
+
 // HealthCheck handles the health check endpoint
 // @Summary Health check
 // @Description Check the health status of the service
@@ -381,7 +391,7 @@ func (h *Handler) PatchURL(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param id path string true "URL ID" format(uuid)
-// @Success 200 {object} map[string]string
+// @Success 204 "URL deleted successfully"
 // @Failure 400 {object} map[string]string
 // @Failure 404 {object} map[string]string
 // @Failure 500 {object} map[string]string
@@ -424,7 +434,7 @@ func (h *Handler) DeleteURL(c *gin.Context) {
 		span.RecordError(err)
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "URL deleted successfully"})
+	c.Status(http.StatusNoContent)
 }
 
 // Redirect handles the short URL redirect

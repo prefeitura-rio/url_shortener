@@ -50,7 +50,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/urls": {
@@ -107,7 +112,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       },
       "post": {
         "description": "Create a new short URL with optional custom path and metadata",
@@ -176,7 +186,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/urls/{id}": {
@@ -248,7 +263,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       },
       "put": {
         "description": "Update an existing short URL",
@@ -321,7 +341,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       },
       "delete": {
         "description": "Delete a short URL by its ID",
@@ -384,7 +409,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       },
       "patch": {
         "description": "Partially update a short URL by its ID (only provided fields will be updated)",
@@ -457,7 +487,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/{shortPath}": {
@@ -515,13 +550,18 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     }
   },
   "servers": [
     {
-      "url": "https://staging.app.dados.rio/link/api"
+      "url": "https://pref.rio/link/api"
     }
   ],
   "components": {
@@ -539,11 +579,10 @@
       }
     },
     "securitySchemes": {
-      "ApiKeyAuth": {
-        "description": "API key authentication (if implemented)",
-        "type": "apiKey",
-        "name": "Authorization",
-        "in": "header"
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     },
     "schemas": {

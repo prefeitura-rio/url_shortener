@@ -1,13 +1,12 @@
 # Build stage
-FROM golang:1.21-alpine AS builder
+FROM golang:1.24-alpine AS builder
 
-# Install git and ca-certificates (needed for go mod download)
-RUN apk add --no-cache git ca-certificates tzdata
+# Install ca-certificates
+RUN apk add --no-cache ca-certificates
 
-# Set working directory
 WORKDIR /app
 
-# Copy go mod files
+# Copy go mod and sum files
 COPY go.mod go.sum ./
 
 # Download dependencies
@@ -16,26 +15,35 @@ RUN go mod download
 # Copy source code
 COPY . .
 
-# Build the application
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
+# Generate Swagger docs
+RUN go install github.com/swaggo/swag/cmd/swag@latest && \
+    swag init -g main.go
+
+# Build the binary
+RUN CGO_ENABLED=0 GOOS=linux go build -trimpath -ldflags="-s -w" -o url-shortener main.go
 
 # Final stage
 FROM scratch
 
-# Import from builder
-COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
-COPY --from=builder /usr/share/zoneinfo /usr/share/zoneinfo
-COPY --from=builder /app/main /main
+WORKDIR /app
 
-# Create non-root user
-USER 1000:1000
+# Copy ca-certificates
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
+
+# Copy the binary
+COPY --from=builder /app/url-shortener .
+
+# Copy swagger docs
+COPY --from=builder /app/docs ./docs
+
+# Copy templates
+COPY --from=builder /app/internal/templates ./internal/templates
 
 # Expose port
 EXPOSE 8080
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD ["/main", "-health-check"] || exit 1
+# Set environment variables
+ENV GIN_MODE=release
 
-# Run the application
-ENTRYPOINT ["/main"] 
+# Run the binary
+CMD ["./url-shortener"] 

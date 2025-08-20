@@ -561,7 +561,12 @@
   },
   "servers": [
     {
-      "url": "https://pref.rio/link/api"
+      "url": "https://pref.rio/link/api",
+      "description": "Production"
+    },
+    {
+      "url": "https://staging.app.dados.rio/link/api",
+      "description": "Staging"
     }
   ],
   "components": {

@@ -177,32 +177,32 @@ func (db *DB) UpdateURL(ctx context.Context, id uuid.UUID, req UpdateURLRequest)
 	// Build dynamic query
 	query := `UPDATE urls SET updated_at = NOW()`
 	args := []interface{}{}
-	argCount := 1
+	argCount := 0
 
 	if req.ShortPath != nil {
-		query += fmt.Sprintf(", short_path = $%d", argCount+1)
-		args = append(args, *req.ShortPath)
 		argCount++
+		query += fmt.Sprintf(", short_path = $%d", argCount)
+		args = append(args, *req.ShortPath)
 	}
 	if req.Destination != nil {
-		query += fmt.Sprintf(", destination = $%d", argCount+1)
-		args = append(args, *req.Destination)
 		argCount++
+		query += fmt.Sprintf(", destination = $%d", argCount)
+		args = append(args, *req.Destination)
 	}
 	if req.Title != nil {
-		query += fmt.Sprintf(", title = $%d", argCount+1)
-		args = append(args, *req.Title)
 		argCount++
+		query += fmt.Sprintf(", title = $%d", argCount)
+		args = append(args, *req.Title)
 	}
 	if req.Description != nil {
-		query += fmt.Sprintf(", description = $%d", argCount+1)
-		args = append(args, *req.Description)
 		argCount++
+		query += fmt.Sprintf(", description = $%d", argCount)
+		args = append(args, *req.Description)
 	}
 	if req.ImageURL != nil {
-		query += fmt.Sprintf(", image_url = $%d", argCount+1)
-		args = append(args, *req.ImageURL)
 		argCount++
+		query += fmt.Sprintf(", image_url = $%d", argCount)
+		args = append(args, *req.ImageURL)
 	}
 	if req.ExpiresAt != nil {
 		if *req.ExpiresAt == nil {
@@ -210,13 +210,14 @@ func (db *DB) UpdateURL(ctx context.Context, id uuid.UUID, req UpdateURLRequest)
 			query += ", expires_at = NULL"
 		} else {
 			// Set to the provided time
-			query += fmt.Sprintf(", expires_at = $%d", argCount+1)
-			args = append(args, **req.ExpiresAt)
 			argCount++
+			query += fmt.Sprintf(", expires_at = $%d", argCount)
+			args = append(args, **req.ExpiresAt)
 		}
 	}
 
-	query += fmt.Sprintf(" WHERE id = $%d", argCount+1)
+	argCount++
+	query += fmt.Sprintf(" WHERE id = $%d", argCount)
 	args = append(args, id)
 
 	query += ` RETURNING id, short_path, destination, title, description, image_url, expires_at, created_at, updated_at`

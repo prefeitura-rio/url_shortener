@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp"
+	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
 	"go.opentelemetry.io/otel/sdk/resource"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
 	semconv "go.opentelemetry.io/otel/semconv/v1.21.0"
@@ -20,10 +20,10 @@ func InitTracer(exporterURL string) (*sdktrace.TracerProvider, error) {
 
 	ctx := context.Background()
 
-	// Create OTLP exporter
-	exporter, err := otlptracehttp.New(ctx,
-		otlptracehttp.WithEndpoint(exporterURL),
-		otlptracehttp.WithInsecure(),
+	// Create OTLP gRPC exporter
+	exporter, err := otlptracegrpc.New(ctx,
+		otlptracegrpc.WithEndpoint(exporterURL),
+		otlptracegrpc.WithInsecure(),
 	)
 	if err != nil {
 		return nil, err

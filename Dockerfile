@@ -39,7 +39,7 @@ COPY --from=builder /app/docs ./docs
 # Copy templates
 COPY --from=builder /app/internal/templates ./internal/templates
 
-# Copy assets (logo for QR codes)
+# Copy assets directory (logo for QR codes)
 COPY --from=builder /app/internal/assets ./internal/assets
 
 # Expose port

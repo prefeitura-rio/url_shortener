@@ -58,6 +58,264 @@
         ]
       }
     },
+    "/qr": {
+      "get": {
+        "description": "Generate a QR code with customization options via query parameters",
+        "tags": [
+          "qrcode"
+        ],
+        "summary": "Generate QR code (GET)",
+        "parameters": [
+          {
+            "description": "The data to encode in the QR code",
+            "name": "data",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Output image size in pixels (default: 256, min: 64, max: 2048)",
+            "name": "size",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Error correction level: low, medium, high, highest (default: high)",
+            "name": "error_correction",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "QR code foreground color in hex (default: #000000)",
+            "name": "foreground_color",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Background color in hex (default: #FFFFFF)",
+            "name": "background_color",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Make background transparent (default: false)",
+            "name": "transparent_background",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Include logo in center (default: true)",
+            "name": "include_logo",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Logo color in hex (optional)",
+            "name": "logo_color",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Logo shape: circle or square (default: circle)",
+            "name": "logo_shape",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "QR module shape: square, circle, rounded (default: square)",
+            "name": "module_shape",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Border width in modules (default: 2, min: 0, max: 10)",
+            "name": "border_width",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Output format: png or jpeg (default: png)",
+            "name": "format",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "QR code image",
+            "content": {
+              "image/png": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "image/jpeg": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "image/png": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                }
+              },
+              "image/jpeg": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "image/png": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                }
+              },
+              "image/jpeg": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "description": "Generate a QR code with full customization options via JSON body",
+        "tags": [
+          "qrcode"
+        ],
+        "summary": "Generate QR code (POST)",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/handlers.QRCodeRequest"
+              }
+            }
+          },
+          "description": "QR code generation request",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "QR code image",
+            "content": {
+              "image/png": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "image/jpeg": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "image/png": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                }
+              },
+              "image/jpeg": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "image/png": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                }
+              },
+              "image/jpeg": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
     "/urls": {
       "get": {
         "description": "Retrieve a paginated list of short URLs",
@@ -713,6 +971,62 @@
           "title": {
             "type": "string",
             "example": "Updated Title"
+          }
+        }
+      },
+      "handlers.QRCodeRequest": {
+        "type": "object",
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "background_color": {
+            "type": "string",
+            "example": "#FFFFFF"
+          },
+          "border_width": {
+            "type": "integer",
+            "example": 2
+          },
+          "data": {
+            "type": "string",
+            "example": "https://example.com"
+          },
+          "error_correction": {
+            "type": "string",
+            "example": "high"
+          },
+          "foreground_color": {
+            "type": "string",
+            "example": "#000000"
+          },
+          "format": {
+            "type": "string",
+            "example": "png"
+          },
+          "include_logo": {
+            "type": "boolean",
+            "example": true
+          },
+          "logo_color": {
+            "type": "string",
+            "example": "#FF5733"
+          },
+          "logo_shape": {
+            "type": "string",
+            "example": "circle"
+          },
+          "module_shape": {
+            "type": "string",
+            "example": "square"
+          },
+          "size": {
+            "type": "integer",
+            "example": 512
+          },
+          "transparent_background": {
+            "type": "boolean",
+            "example": false
           }
         }
       }

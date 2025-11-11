@@ -102,6 +102,10 @@ func setupRoutes(router *gin.Engine, h *handlers.Handler) {
 		api.PUT("/urls/:id", h.UpdateURL)
 		api.PATCH("/urls/:id", h.PatchURL)
 		api.DELETE("/urls/:id", h.DeleteURL)
+
+		// QR code generation endpoints
+		api.POST("/qr", h.GenerateQRCodePOST)
+		api.GET("/qr", h.GenerateQRCodeGET)
 	}
 
 	// Redirect route (must be last to avoid conflicts with API routes)
